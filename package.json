@@ -1,0 +1,20 @@
+{
+  "name": "nodejs-fundamentals",
+  "version": "1.0.0",
+  "description": "Node JS Fundamentals",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KingAbesh/NodeJS-Fundamentals.git"
+  },
+  "author": "kingabesh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KingAbesh/NodeJS-Fundamentals/issues"
+  },
+  "homepage": "https://github.com/KingAbesh/NodeJS-Fundamentals#readme"
+}
