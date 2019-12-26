@@ -2,20 +2,17 @@ const express = require("express");
 
 const app = express();
 
+const adminRoutes = require('./routes/admin')
+const shopRoutes = require('./routes/shop')
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/add-item', (req, res, next) => {
-  res.send(
-    "<form action='/item' method='POST'><input type='text' name='title'><button type='submit'>send</button></form>"
-  );
-});
 
-app.post('/item', (req, res, next) => {
-  console.log(req.body);
-  res.redirect("/");
-});
-app.use("/", (req, res, next) => {
-  res.send("<h2>Hello Sure Boy</h2>");
-});
+app.use('/admin', adminRoutes);
+app.use(shopRoutes);
+
+app.use((req, res, next) => {
+    res.status(404).send('<h1>Oh oh, this page does not exist</h1>')
+})
 
 app.listen(3000);
