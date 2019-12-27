@@ -1,6 +1,6 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
-const {addItems} = require('../controllers/admin')
+const { addItems } = require("../controllers/admin");
 
 router.post("/add-item", addItems);
 
@@ -9,7 +9,4 @@ router.post("/item", (req, res, next) => {
   res.redirect("/");
 });
 
-
 module.exports = router;
-
-  

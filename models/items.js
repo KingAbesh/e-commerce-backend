@@ -5,12 +5,14 @@ class Item {
     this.title = title;
     this.price = price;
     this.desc = desc;
-    this.imageURL = imageURL || null;
   }
 
   save() {
-      const db = getDB();
-      db.collection('items').insertOne(this).then(result => console.log(result)).catch(err => console.log(err));
+    const db = getDB();
+    return db.collection("items")
+      .insertOne(this)
+      .then(result => console.log(result))
+      .catch(err => console.log(err));
   }
 }
 

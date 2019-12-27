@@ -15,8 +15,9 @@ app.use(shopRoutes);
 
 app.use((req, res, next) => {
   res.status(404).send("<h1>Oh oh, this page does not exist</h1>");
+  next();
 });
 
-mongoConnect(()=> { 
-    app.listen(3000);
+mongoConnect(() => {
+  app.listen(3000);
 });
