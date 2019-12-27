@@ -1,7 +1,7 @@
 const getDB = require("../utils/database").getDB;
 
 class Item {
-  constructor(title, price, desc, imageURL) {
+  constructor(title, price, desc) {
     this.title = title;
     this.price = price;
     this.desc = desc;
