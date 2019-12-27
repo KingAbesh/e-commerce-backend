@@ -1,10 +1,8 @@
 const router = require('express').Router();
 
-router.get("/add-item", (req, res, next) => {
-  res.send(
-    "<form action='/admin/item' method='POST'><input type='text' name='title'><button type='submit'>send</button></form>"
-  );
-});
+const {addItems} = require('../controllers/admin')
+
+router.post("/add-item", addItems);
 
 router.post("/item", (req, res, next) => {
   console.log(req.body);
@@ -14,3 +12,4 @@ router.post("/item", (req, res, next) => {
 
 module.exports = router;
 
+  
