@@ -1,3 +1,4 @@
+const mongodb = require("mongodb");
 const getDB = require("../utils/database").getDB;
 
 class Item {
@@ -33,7 +34,7 @@ class Item {
     const db = getDB();
     return db
       .collection("items")
-      .find({ _id: id })
+      .find({ _id: new mongodb.ObjectId(id) })
       .next()
       .then(item => {
         console.log(item);

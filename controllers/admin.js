@@ -1,5 +1,12 @@
 const Item = require("../models/items");
 
+
+/** 
+* @params {req} request from client
+* @params {req} response to client
+* @params {next} method to move to the next middleware
+* @return {object}
+*/
 exports.addItems = (req, res, next) => {
   console.log("Hello");
 
@@ -12,7 +19,7 @@ exports.addItems = (req, res, next) => {
     .save()
     .then(result => {
       console.log(result);
-      res.status(200).send("Hello World");
+      res.status(200).send(result);
     })
     .catch(err => console.log(err));
 };
