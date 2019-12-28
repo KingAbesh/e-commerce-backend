@@ -9,9 +9,36 @@ class Item {
 
   save() {
     const db = getDB();
-    return db.collection("items")
+    return db
+      .collection("items")
       .insertOne(this)
       .then(result => console.log(result))
+      .catch(err => console.log(err));
+  }
+
+  static fetchItems() {
+    const db = getDB();
+    return db
+      .collection("items")
+      .find()
+      .toArray()
+      .then(items => {
+        console.log(items);
+        return items;
+      })
+      .catch(err => console.log(err));
+  }
+
+  static findById(id) {
+    const db = getDB();
+    return db
+      .collection("items")
+      .find({ _id: id })
+      .next()
+      .then(item => {
+        console.log(item);
+        return item;
+      })
       .catch(err => console.log(err));
   }
 }
