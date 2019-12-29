@@ -8,13 +8,12 @@ const Item = require("../models/items");
 exports.addItems = (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
-  const desc = req.body.desc;
+  const desc = req.body.desc; // the id is stored in user object at the app.js file so we can have access to it across our application
 
-  const item = new Item(title, price, desc);
+  const item = new Item(title, price, desc, null, req.user._id);
   item
     .save()
     .then(result => {
-      console.log(result);
       res.status(200).send(result['ops']);
     })
     .catch(err => console.log(err));
