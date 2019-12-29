@@ -8,9 +8,10 @@ const Item = require("../models/items");
 exports.addItems = (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
-  const desc = req.body.desc; // the id is stored in user object at the app.js file so we can have access to it across our application
+  const desc = req.body.desc; 
+  const id = req.user._id; // the id is stored in user object at the app.js file so we can have access to it across our application
 
-  const item = new Item(title, price, desc, null, req.user._id);
+  const item = new Item(title, price, desc, null, id);
   item
     .save()
     .then(result => {

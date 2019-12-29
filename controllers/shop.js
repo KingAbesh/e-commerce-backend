@@ -10,11 +10,23 @@ exports.getItems = (req, res, next) => {
 };
 
 exports.getItem = (req, res, next) => {
-    const id = req.params.id;
+  const id = req.params.id;
   Item.findById(id)
-    .then(product => {
-      console.log(product);
-      res.status(200).send(product);
+    .then(item => {
+      console.log(item);
+      res.status(200).send(item);
+    })
+    .catch(err => console.log(err));
+};
+
+exports.addToCart = (req, res, next) => {
+  const itemId = req.params.id;
+  Item.findById(itemId)
+    .then(item => {
+      return req.user.addToCart(item);
+    })
+    .then(result => {
+      res.status(200).send("item successfully added to cart");
     })
     .catch(err => console.log(err));
 };

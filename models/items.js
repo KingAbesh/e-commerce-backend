@@ -6,18 +6,18 @@ class Item {
     this.title = title;
     this.price = price;
     this.desc = desc;
-    this._id = id ? new mongodb.ObjectId(id): null;
+    this._id = id ? new mongodb.ObjectId(id) : null;
     this.userId = userId;
   }
 
   save() {
     const db = getDB();
     let dbOperation;
-    if (this._id) { 
+    if (this._id) {
       // Update item;
-     dbOperation = db
-       .collection("items")
-       .updateOne({ _id: this._id}, {$set: this}); 
+      dbOperation = db
+        .collection("items")
+        .updateOne({ _id: this._id }, { $set: this });
     } else {
       dbOperation = db.collection("items").insertOne(this);
     }
@@ -48,15 +48,18 @@ class Item {
       .find({ _id: new mongodb.ObjectId(id) })
       .next()
       .then(item => {
-        console.log(item);
         return item;
       })
       .catch(err => console.log(err));
   }
 
-  static deleteById(id){
+  static deleteById(id) {
     const db = getDB();
-    return db.collection("items").deleteOne({_id: new mongodb.ObjectID(id)}).then(result => console.log("Product deleted")).catch(err => console.log(err));
+    return db
+      .collection("items")
+      .deleteOne({ _id: new mongodb.ObjectID(id) })
+      .then(result => console.log("Product deleted"))
+      .catch(err => console.log(err));
   }
 }
 

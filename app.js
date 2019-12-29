@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
   User.findById("5e081164f625231b98dcb996")
     .then(user => {
-      req.user = user;
+      req.user = new User(user.name, user.email, user.cart, user._id);
       next();
     })
     .catch(err => console.log(err));
