@@ -1,12 +1,22 @@
 const router = require("express").Router();
 
-const { addItems } = require("../controllers/admin");
+const { addItems, getItems, editItem } = require("../controllers/admin");
+
+/**
+ * @desc creates an item
+ * @method post
+ * @api public
+ */
 
 router.post("/add-item", addItems);
 
-// router.post("/item", (req, res, next) => {
-//   console.log(req.body);
-//   res.redirect("/");
-// });
+/**
+ * @desc gets all items
+ * @method get
+ * @api public
+ */
+router.get("/items", getItems);
+
+router.post("/edit-item/:id", editItem);
 
 module.exports = router;

@@ -2,7 +2,18 @@ const router = require("express").Router();
 
 const { getItems, getItem } = require("../controllers/shop");
 
-router.get("/products", getItems);
-router.get("/products/:id", getItem);
+/**
+ * @desc fetches items
+ * @method get
+ * @api public
+ */
+router.get("/items", getItems);
+
+/**
+ * @desc fetches an item
+ * @method get
+ * @api public
+ */
+router.get("/items/:id", getItem);
 
 module.exports = router;
