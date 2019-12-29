@@ -4,11 +4,22 @@ const app = express();
 
 const mongoConnect = require("./utils/database").mongoConnect;
 
+const User = require("./models/user");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+  User.findById("5e081164f625231b98dcb996")
+    .then(user => {
+      req.user = user;
+      next();
+    })
+    .catch(err => console.log(err));
+  next();
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);

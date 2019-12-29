@@ -6,7 +6,7 @@ class Item {
     this.title = title;
     this.price = price;
     this.desc = desc;
-    this._id = id;
+    this._id = id ? new mongodb.ObjectId(id): null;
   }
 
   save() {
@@ -16,13 +16,13 @@ class Item {
       // Update item;
      dbOperation = db
        .collection("items")
-       .updateOne({ _id: new mongodb.ObjectId(this._id)}, {$set: this}); 
+       .updateOne({ _id: this._id}, {$set: this}); 
     } else {
       dbOperation = db.collection("items").insertOne(this);
     }
     return dbOperation
       .then(result => {
-        console.log(result)
+        return result;
       })
       .catch(err => console.log(err));
   }
@@ -51,6 +51,11 @@ class Item {
         return item;
       })
       .catch(err => console.log(err));
+  }
+
+  static deleteById(id){
+    const db = getDB();
+    return db.collection("items").deleteOne({_id: new mongodb.ObjectID(id)}).then(result => console.log("Product deleted")).catch(err => console.log(err));
   }
 }
 
