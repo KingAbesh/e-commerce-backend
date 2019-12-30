@@ -10,7 +10,7 @@ exports.addItems = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  const item = new Item({title, price, description});
+  const item = new Item({ title, price, description });
   item
     .save()
     .then(result => {
@@ -29,10 +29,14 @@ exports.editItem = (req, res, next) => {
   const id = req.params.id;
   const title = req.body.title;
   const price = req.body.price;
-  const desc = req.body.desc;
-  const item = new Item(title, price, desc, id);
-  return item
-    .save()
+  const description = req.body.description;
+  Item.findById(id)
+    .then(item => {
+      item.title = title;
+      item.price = price;
+      item.description = description;
+      return item.save();
+    })
     .then(() => {
       res.status(200).send("Product updated successfully");
     })
@@ -41,7 +45,7 @@ exports.editItem = (req, res, next) => {
 
 exports.deleteItem = (req, res, next) => {
   const id = req.params.id;
-  Item.deleteById(id)
+  Item.findByIdAndRemove(id)
     .then(() => res.status(200).send("Successfully deleted item"))
     .catch(err => console.log(err));
 };
