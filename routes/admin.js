@@ -19,22 +19,22 @@ router.post("/add-item", addItems);
  */
 router.get("/items", getItems);
 
-/**
- * @route admin/edit-item/:id
- * @desc edits an item
- * @method put
- * @api public
- */
+// /**
+//  * @route admin/edit-item/:id
+//  * @desc edits an item
+//  * @method put
+//  * @api public
+//  */
 
-router.put("/edit-item/:id", editItem);
+// router.put("/edit-item/:id", editItem);
 
-/**
- * @route admin/edit-item/:id
- * @desc deletes an item
- * @method delete
- * @api public
- */
+// /**
+//  * @route admin/edit-item/:id
+//  * @desc deletes an item
+//  * @method delete
+//  * @api public
+//  */
 
-router.delete("/delete-item/:id", deleteItem);
+// router.delete("/delete-item/:id", deleteItem);
 
 module.exports = router;

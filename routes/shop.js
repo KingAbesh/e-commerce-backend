@@ -12,7 +12,7 @@ const {
 
 /**
  * @desc fetches items
- * @method get
+ * @method get 
  * @api public
  */
 router.get("/items", getItems);
@@ -24,39 +24,39 @@ router.get("/items", getItems);
  */
 router.get("/items/:id", getItem);
 
-/**
- * @desc gets all items in a cart
- * @method get
- * @api public
- */
-router.get("/cart", getCart);
+// /**
+//  * @desc gets all items in a cart
+//  * @method get
+//  * @api public
+//  */
+// router.get("/cart", getCart);
 
-/**
- * @desc adds an item to a cart
- * @method post
- * @api public
- */
-router.post("/add-to-cart/:id", addToCart);
+// /**
+//  * @desc adds an item to a cart
+//  * @method post
+//  * @api public
+//  */
+// router.post("/add-to-cart/:id", addToCart);
 
-/**
- * @desc deletes an item from a cart
- * @method delete
- * @api public
- */
-router.delete("/delete-from-cart/:id", deleteCartItem);
+// /**
+//  * @desc deletes an item from a cart
+//  * @method delete
+//  * @api public
+//  */
+// router.delete("/delete-from-cart/:id", deleteCartItem);
 
-/**
- * @desc creates an order
- * @method post
- * @api public
- */
-router.post("/create-order", addOrder);
+// /**
+//  * @desc creates an order
+//  * @method post
+//  * @api public
+//  */
+// router.post("/create-order", addOrder);
 
-/**
- * @desc fetches all orders specific to a user
- * @method get
- * @api public
- */
-router.get("/orders", fetchOrders);
+// /**
+//  * @desc fetches all orders specific to a user
+//  * @method get
+//  * @api public
+//  */
+// router.get("/orders", fetchOrders);
 
 module.exports = router;
