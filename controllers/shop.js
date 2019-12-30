@@ -48,3 +48,12 @@ exports.deleteCartItem = (req, res, next) => {
     .then(() => res.status(200).send("Item sucessfully removed from cart"))
     .catch(err => console.log(err));
 };
+
+exports.addOrder = (req, res, next) => {
+  req.user
+    .createOrder()
+    .then(() => {
+      res.status(200).send("Successfully placed order");
+    })
+    .catch(err => console.log(err));
+};

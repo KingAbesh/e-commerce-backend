@@ -5,7 +5,8 @@ const {
   getItem,
   addToCart,
   getCart,
-  deleteCartItem
+  deleteCartItem,
+  addOrder
 } = require("../controllers/shop");
 
 /**
@@ -43,6 +44,11 @@ router.post("/add-to-cart/:id", addToCart);
  */
 router.delete("/delete-from-cart/:id", deleteCartItem);
 
-
+/**
+ * @desc adds an item to a cart
+ * @method post
+ * @api public
+ */
+router.post("/create-order", addOrder);
 
 module.exports = router;
