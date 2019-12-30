@@ -1,6 +1,11 @@
 const router = require("express").Router();
 
-const { addItems, getItems, editItem, deleteItem } = require("../controllers/admin");
+const {
+  addItems,
+  getItems,
+  editItem,
+  deleteItem
+} = require("../controllers/admin");
 
 /**
  * @route admin/add-item

@@ -10,7 +10,7 @@ exports.addItems = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
 
-  const item = new Item({ title, price, description });
+  const item = new Item({ title, price, description, userId: req.user._id });
   item
     .save()
     .then(result => {

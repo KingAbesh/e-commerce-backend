@@ -24,26 +24,26 @@ router.get("/items", getItems);
  */
 router.get("/items/:id", getItem);
 
-// /**
-//  * @desc gets all items in a cart
-//  * @method get
-//  * @api public
-//  */
-// router.get("/cart", getCart);
+/**
+ * @desc gets all items in a cart
+ * @method get
+ * @api public
+ */
+router.get("/cart", getCart);
 
-// /**
-//  * @desc adds an item to a cart
-//  * @method post
-//  * @api public
-//  */
-// router.post("/add-to-cart/:id", addToCart);
+/**
+ * @desc adds an item to a cart
+ * @method post
+ * @api public
+ */
+router.post("/add-to-cart/:id", addToCart);
 
-// /**
-//  * @desc deletes an item from a cart
-//  * @method delete
-//  * @api public
-//  */
-// router.delete("/delete-from-cart/:id", deleteCartItem);
+/**
+ * @desc deletes an item from a cart
+ * @method delete
+ * @api public
+ */
+router.delete("/delete-from-cart/:id", deleteCartItem);
 
 // /**
 //  * @desc creates an order

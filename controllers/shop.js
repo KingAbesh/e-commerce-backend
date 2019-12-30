@@ -33,10 +33,11 @@ exports.addToCart = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   req.user
-    .getCart()
-    .then(items => {
-      console.log(items);
-      res.status(200).send(items);
+    .populate("cart.items.itemId")
+    .execPopulate()
+    .then(user => {
+      console.log(user.cart.items);
+      res.status(200).send(user.cart.items);
     })
     .catch(err => console.log(err));
 };
@@ -44,7 +45,7 @@ exports.getCart = (req, res, next) => {
 exports.deleteCartItem = (req, res, next) => {
   const itemId = req.params.id;
   req.user
-    .deleteCartItem(itemId)
+    .removeFromCart(itemId)
     .then(() => res.status(200).send("Item sucessfully removed from cart"))
     .catch(err => console.log(err));
 };
