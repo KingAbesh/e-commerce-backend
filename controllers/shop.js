@@ -30,3 +30,21 @@ exports.addToCart = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
+
+exports.getCart = (req, res, next) => {
+  req.user
+    .getCart()
+    .then(items => {
+      console.log(items);
+      res.status(200).send(items);
+    })
+    .catch(err => console.log(err));
+};
+
+exports.deleteCartItem = (req, res, next) => {
+  const itemId = req.params.id;
+  req.user
+    .deleteCartItem(itemId)
+    .then(() => res.status(200).send("Item sucessfully removed from cart"))
+    .catch(err => console.log(err));
+};

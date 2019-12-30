@@ -43,6 +43,42 @@ class User {
       );
   }
 
+  getCart() {
+    const db = getDB();
+    const itemIds = this.cart.items.map(item => item.itemId);
+    return db
+      .collection("items")
+      .find({ _id: { $in: itemIds } })
+      .toArray()
+      .then(items => {
+        return items.map(item => {
+          return {
+            ...item,
+            quantity: this.cart.items.find(i => {
+              return i.itemId.toString() === item._id.toString();
+            }).quantity
+          };
+        });
+      });
+  }
+
+  deleteCartItem(id) {
+    const db = getDB();
+
+    const updatedCartItems = this.cart.items.filter(item => {
+      return item.itemId.toString() !== id.toString();
+    });
+    const updatedCart = {
+      items: updatedCartItems
+    };
+    return db
+      .collection("users")
+      .updateOne(
+        { _id: new mongodb.ObjectId(this._id) },
+        { $set: { cart: updatedCart } }
+      );
+  }
+
   static findById(id) {
     const db = getDB();
     return db
