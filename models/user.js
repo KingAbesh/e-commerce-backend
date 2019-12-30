@@ -81,10 +81,18 @@ class User {
 
   createOrder() {
     const db = getDB();
-    return db
-      .collection("orders")
-      .insertOne(this.cart)
-      .then(result => {
+    return this.getCart()
+      .then(items => {
+        const order = {
+          items,
+          user: {
+            _id: new mongodb.ObjectId(this._id),
+            name: this.name
+          }
+        };
+        return db.collection("orders").insertOne(order);
+      })
+      .then(() => {
         this.cart = { items: [] };
         return db
           .collection("users")
@@ -92,6 +100,18 @@ class User {
             { _id: new mongodb.ObjectId(this._id) },
             { $set: { cart: { items: [] } } }
           );
+      })
+      .catch(err => console.log(err));
+  }
+
+  getOrders() {
+    const db = getDB();
+    return db
+      .collection("orders")
+      .find({ "user._id": new mongodb.ObjectId(this._id) })
+      .toArray()
+      .then(orders => {
+        return orders;
       })
       .catch(err => console.log(err));
   }

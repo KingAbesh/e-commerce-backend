@@ -57,3 +57,12 @@ exports.addOrder = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
+
+exports.fetchOrders = (req, res, next) => {
+  req.user
+    .getOrders()
+    .then(orders => {
+      res.status(200).send(orders);
+    })
+    .catch(err => console.log(err));
+};
