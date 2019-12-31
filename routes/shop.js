@@ -52,11 +52,11 @@ router.delete("/delete-from-cart/:id", deleteCartItem);
  */
 router.post("/create-order", addOrder);
 
-// /**
-//  * @desc fetches all orders specific to a user
-//  * @method get
-//  * @api public
-//  */
-// router.get("/orders", fetchOrders);
+/**
+ * @desc fetches all orders specific to a user
+ * @method get
+ * @api public
+ */
+router.get("/orders", fetchOrders);
 
 module.exports = router;
