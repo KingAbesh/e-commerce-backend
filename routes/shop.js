@@ -45,12 +45,12 @@ router.post("/add-to-cart/:id", addToCart);
  */
 router.delete("/delete-from-cart/:id", deleteCartItem);
 
-// /**
-//  * @desc creates an order
-//  * @method post
-//  * @api public
-//  */
-// router.post("/create-order", addOrder);
+/**
+ * @desc creates an order
+ * @method post
+ * @api public
+ */
+router.post("/create-order", addOrder);
 
 // /**
 //  * @desc fetches all orders specific to a user
