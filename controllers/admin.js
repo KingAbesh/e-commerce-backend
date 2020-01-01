@@ -1,11 +1,14 @@
 const Item = require("../models/items");
 /**
- * @param {req} request from client
- * @param {req} response to client
+ * @param {req} http request from client
+ * @param {req} http response to client
  * @param {next} method to move to the next middleware
  * @return {object}
  */
-exports.addItems = (req, res, next) => {
+
+// Creates an item
+
+exports.createItem = (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
   const description = req.body.description;
@@ -19,11 +22,15 @@ exports.addItems = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+// gets all items
+
 exports.getItems = (req, res, next) => {
   Item.find()
     .then(item => res.status(200).send(item))
     .catch(err => console.log(err));
 };
+
+// updates an item
 
 exports.editItem = (req, res, next) => {
   const id = req.params.id;
@@ -42,6 +49,8 @@ exports.editItem = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
+
+// deletes an item
 
 exports.deleteItem = (req, res, next) => {
   const id = req.params.id;

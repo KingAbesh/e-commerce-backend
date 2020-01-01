@@ -11,6 +11,8 @@ const authRoutes = require("./routes/auth");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// manually creating a user but no longer needed as authorization has been implemented. Leaving it here for reference.
+
 app.use((req, res, next) => {
   User.findById("5e097c1c61cb9d01486e9d4d")
     .then(user => {
@@ -20,14 +22,20 @@ app.use((req, res, next) => {
     .catch(err => console.log(err));
 });
 
+// Registers every route
+
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
+
+// handles error and non-existent pages
 
 app.use((req, res, next) => {
   res.status(404).send("<h1>Oh oh, this page does not exist</h1>");
   next();
 });
+
+// connects the server to the database
 
 mongoose
   .connect(

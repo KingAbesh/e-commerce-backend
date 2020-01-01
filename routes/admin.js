@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 const {
-  addItems,
+  createItem,
   getItems,
   editItem,
   deleteItem
@@ -14,7 +14,7 @@ const {
  * @api public
  */
 
-router.post("/add-item", addItems);
+router.post("/add-item", createItem);
 
 /**
  * @route admin/items

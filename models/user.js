@@ -21,6 +21,8 @@ const userSchema = new Schema({
   }
 });
 
+// Instance method to add an item to user's cart
+
 userSchema.methods.addToCart = function(item) {
   const cartProductIndex = this.cart.items.findIndex(cartProduct => {
     return cartProduct.itemId.toString() === item._id.toString();
@@ -45,17 +47,21 @@ userSchema.methods.addToCart = function(item) {
   return this.save();
 };
 
-userSchema.methods.removeFromCart = function(id){
+// Instance method to remove an item from user's cart
+
+userSchema.methods.removeFromCart = function(id) {
   const updatedCartItems = this.cart.items.filter(item => {
     return item.itemId.toString() !== id.toString();
   });
   this.cart.items = updatedCartItems;
   return this.save();
-}
+};
 
-userSchema.methods.clearCart = function(){
-  this.cart = {items: []};
+// Instance method to clear user's cart
+
+userSchema.methods.clearCart = function() {
+  this.cart = { items: [] };
   return this.save();
-}
+};
 
 module.exports = mongoose.model("User", userSchema);

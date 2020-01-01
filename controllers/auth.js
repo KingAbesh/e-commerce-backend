@@ -1,6 +1,8 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
+// Registers a user
+
 exports.signUp = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -24,6 +26,8 @@ exports.signUp = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
+
+//  Logs in a user
 
 exports.logIn = (req, res, next) => {
   const email = req.body.email;
@@ -51,8 +55,4 @@ exports.logIn = (req, res, next) => {
       });
     })
     .catch(err => console.log(err));
-};
-
-exports.getUser = (req, res, next) => {
-  res.send("You called me !");
 };

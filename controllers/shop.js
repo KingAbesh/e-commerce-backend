@@ -1,6 +1,8 @@
 const Item = require("../models/items");
 const Order = require("../models/order");
 
+//  gets all items
+
 exports.getItems = (req, res, next) => {
   Item.find()
     .then(products => {
@@ -9,6 +11,8 @@ exports.getItems = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
+
+// gets a single item
 
 exports.getItem = (req, res, next) => {
   const id = req.params.id;
@@ -19,6 +23,8 @@ exports.getItem = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
+
+// adds an item(s) to a cart
 
 exports.addToCart = (req, res, next) => {
   const itemId = req.params.id;
@@ -32,6 +38,8 @@ exports.addToCart = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+//  gets a cart as specific to a user
+
 exports.getCart = (req, res, next) => {
   req.user
     .populate("cart.items.itemId")
@@ -43,6 +51,8 @@ exports.getCart = (req, res, next) => {
     .catch(err => console.log(err));
 };
 
+//  removes an item from a cart
+
 exports.deleteCartItem = (req, res, next) => {
   const itemId = req.params.id;
   req.user
@@ -50,6 +60,8 @@ exports.deleteCartItem = (req, res, next) => {
     .then(() => res.status(200).send("Item sucessfully removed from cart"))
     .catch(err => console.log(err));
 };
+
+// creates an order
 
 exports.addOrder = (req, res, next) => {
   req.user
@@ -74,6 +86,8 @@ exports.addOrder = (req, res, next) => {
     .then(res.status(200).send("Successfully placed order"))
     .catch(err => console.log(err));
 };
+
+// fetches all orders specific to a user
 
 exports.fetchOrders = (req, res, next) => {
   Order.find({ "user.userId": req.user._id })
