@@ -70,7 +70,6 @@ exports.addOrder = (req, res, next) => {
     .populate("cart.items.itemId")
     .execPopulate()
     .then(user => {
-      console.log(req.user.email);
       const items = user.cart.items.map(item => {
         return { quantity: item.quantity, item: { ...item.itemId._doc } };
       });

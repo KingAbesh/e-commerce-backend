@@ -1,5 +1,17 @@
+const crypto = require("crypto");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+
+const nodemailer = require("nodemailer");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
+
+const transporter = nodemailer.createTransport(
+  sendgridTransport({
+    auth: {
+      // api_key: Api key goes here..
+    }
+  })
+);
 
 // Registers a user
 
@@ -55,4 +67,32 @@ exports.logIn = (req, res, next) => {
       });
     })
     .catch(err => console.log(err));
+};
+
+exports.passwordReset = (req, res, next) => {
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) res.status(500).send({ message: "something went wrong" });
+    const token = buffer.toString("hex");
+    User.findOne({ email: req.body.email })
+      .then(user => {
+        if (!user) {
+          res.status(404).send({ message: "aww sorry, user not found !" });
+        }
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user.save();
+      })
+      .then(result => {
+        res.status(200).send({message: 'Password reset link sent successfully'})
+        transporter.sendMail({
+          to: req.body.email,
+          from: "abeshekwere@gmail.com",
+          subject: "Password Reset",
+          html: `<p>You requested a password reset</p>
+                <p>Please click this <a href="/https://localhost:3000/reset/${token}">link</a> to set a new password</p>
+          `
+        });
+      })
+      .catch(err => console.log(err));
+  });
 };
