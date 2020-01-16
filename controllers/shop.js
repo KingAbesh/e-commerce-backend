@@ -73,7 +73,7 @@ exports.addOrder = (req, res, next) => {
       });
       const order = new Order({
         user: {
-          name: req.user.name,
+          name: req.user.email,
           userId: req.user._id
         },
         items
