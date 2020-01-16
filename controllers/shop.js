@@ -28,8 +28,10 @@ exports.getItem = (req, res, next) => {
 
 exports.addToCart = (req, res, next) => {
   const itemId = req.params.id;
+
   Item.findById(itemId)
     .then(item => {
+      console.log(item);
       return req.user.addToCart(item);
     })
     .then(result => {
@@ -68,12 +70,13 @@ exports.addOrder = (req, res, next) => {
     .populate("cart.items.itemId")
     .execPopulate()
     .then(user => {
+      console.log(req.user.email);
       const items = user.cart.items.map(item => {
         return { quantity: item.quantity, item: { ...item.itemId._doc } };
       });
       const order = new Order({
         user: {
-          name: req.user.email,
+          email: req.user.email,
           userId: req.user._id
         },
         items

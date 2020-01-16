@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 // manually creating a user but no longer needed as authorization has been implemented. Leaving it here for reference.
 
 app.use((req, res, next) => {
-  User.findById("5e097c1c61cb9d01486e9d4d")
+  User.findById("5e0c4df134913e285ce41650")
     .then(user => {
       req.user = user;
       next();
