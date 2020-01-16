@@ -71,8 +71,9 @@ exports.logIn = (req, res, next) => {
 
 exports.passwordReset = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
-    if (err) res.status(500).send({ message: "something went wrong" });
+    if (err) res.status(402).send({ message: "something went wrong" });
     const token = buffer.toString("hex");
+   console.log(req.body.email);
     User.findOne({ email: req.body.email })
       .then(user => {
         if (!user) {
@@ -83,7 +84,9 @@ exports.passwordReset = (req, res, next) => {
         return user.save();
       })
       .then(result => {
-        res.status(200).send({message: 'Password reset link sent successfully'})
+        res
+          .status(200)
+          .send({ message: "Password reset link sent successfully" });
         transporter.sendMail({
           to: req.body.email,
           from: "abeshekwere@gmail.com",
