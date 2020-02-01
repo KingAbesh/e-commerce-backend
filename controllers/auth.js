@@ -73,14 +73,15 @@ exports.passwordReset = (req, res, next) => {
   crypto.randomBytes(32, (err, buffer) => {
     if (err) res.status(402).send({ message: "something went wrong" });
     const token = buffer.toString("hex");
-   console.log(req.body.email);
+    console.log(req.body.email);
     User.findOne({ email: req.body.email })
       .then(user => {
         if (!user) {
-          res.status(404).send({ message: "aww sorry, user not found !" });
+          res.status(404).send({ message: "aww sorry, user not found!" });
         }
         user.resetToken = token;
         user.resetTokenExpiration = Date.now() + 3600000;
+        console.log(user.resetTokenExpiration);
         return user.save();
       })
       .then(result => {
@@ -98,4 +99,16 @@ exports.passwordReset = (req, res, next) => {
       })
       .catch(err => console.log(err));
   });
+
+  exports.updatePassword = async (req, res, next) => {
+        const token = req.params.token;
+        try {
+          const user = await User.findOne({
+            resetToken: token,
+            resetTokenExpiration: { $gt: Date.now() }
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      };
 };
