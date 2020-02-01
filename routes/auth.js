@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { check, body } = require("express-validator");
 
 const {
   signUp,
@@ -21,7 +22,16 @@ router.post("/login", logIn);
  * @api public
  */
 
-router.post("/signup", signUp);
+router.post(
+  "/signup",
+  [
+    check("email")
+      .isEmail()
+      .withMessage("Invalid email, please review and retry"),
+      body("password").isLength({min: 5}).isAlphanumeric()
+  ],
+  signUp
+);
 
 router.post("/reset", passwordReset);
 

@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const { validationResult } = require("express-validator");
 
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
@@ -18,7 +19,10 @@ const transporter = nodemailer.createTransport(
 exports.signUp = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
   User.findOne({ email })
     .then(userDoc => {
       if (userDoc) {
@@ -90,7 +94,7 @@ exports.passwordReset = (req, res, next) => {
           .send({ message: "Password reset link sent successfully" });
         transporter.sendMail({
           to: req.body.email,
-          from: "abeshekwere@gmail.com",
+          from: "javascripters@gmail.com",
           subject: "Password Reset",
           html: `<p>You requested a password reset</p>
                 <p>Please click this <a href="/https://localhost:3000/reset/${token}">link</a> to set a new password</p>
