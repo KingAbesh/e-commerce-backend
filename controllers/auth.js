@@ -99,16 +99,33 @@ exports.passwordReset = (req, res, next) => {
       })
       .catch(err => console.log(err));
   });
+};
 
-  exports.updatePassword = async (req, res, next) => {
-        const token = req.params.token;
-        try {
-          const user = await User.findOne({
-            resetToken: token,
-            resetTokenExpiration: { $gt: Date.now() }
-          });
-        } catch (err) {
-          console.log(err);
-        }
-      };
+exports.updatePassword = async (req, res, next) => {
+  const updatedPassword = req.body.password;
+  const userId = req.body.user_id;
+  const token = req.params.token;
+  try {
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiration: { $gt: Date.now() },
+      _id: userId
+    });
+    if (!user) {
+      res.status(401).send({
+        message: "Invalid user credentials. Please review and retry"
+      });
+      return;
+    }
+    const hashedPassword = await bcrypt.hash(updatedPassword, 12);
+    user.password = hashedPassword;
+    user.resetToken = undefined;
+    user.resetTokenExpiration = undefined;
+    await user.save();
+    res.send({
+      message: "Password successfully updated!"
+    });
+  } catch (err) {
+    console.log(err);
+  }
 };

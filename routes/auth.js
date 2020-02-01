@@ -1,6 +1,11 @@
 const router = require("express").Router();
 
-const { signUp, logIn, passwordReset } = require("../controllers/auth");
+const {
+  signUp,
+  logIn,
+  passwordReset,
+  updatePassword
+} = require("../controllers/auth");
 
 /**
  * @desc logs in a user
@@ -19,5 +24,7 @@ router.post("/login", logIn);
 router.post("/signup", signUp);
 
 router.post("/reset", passwordReset);
+
+router.post("/reset/:token", updatePassword);
 
 module.exports = router;
