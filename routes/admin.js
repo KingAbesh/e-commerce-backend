@@ -15,7 +15,24 @@ const {
  * @api public
  */
 
-router.post("/add-item", createItem);
+router.post(
+  "/add-item",
+  [
+    body("title")
+      .isString()
+      .isLength({ min: 3 })
+      .withMessage("Please make sure title is at least three characters")
+      .trim(),
+    body("price")
+      .isFloat()
+      .withMessage("Price can only be a number"),
+    body("description")
+      .isLength({ min: 5, max: 100 })
+      .withMessage("Please make sure title is at least five characters")
+      .trim()
+  ],
+  createItem
+);
 
 /**
  * @route admin/items
@@ -32,7 +49,24 @@ router.get("/items", getItems);
  * @api public
  */
 
-router.put("/edit-item/:id", editItem);
+router.put(
+  "/edit-item/:id",
+  [
+    body("title")
+      .isString()
+      .isLength({ min: 3 })
+      .withMessage("Please make sure title is at least three characters")
+      .trim(),
+    body("price")
+      .isFloat()
+      .withMessage("Price can only be a number"),
+    body("description")
+      .isLength({ min: 5, max: 100 })
+      .withMessage("Please make sure title is at least five characters")
+      .trim()
+  ],
+  editItem
+);
 
 /**
  * @route admin/delete-item/:id
