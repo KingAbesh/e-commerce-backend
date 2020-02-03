@@ -23,23 +23,17 @@ exports.signUp = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-  User.findOne({ email })
-    .then(userDoc => {
-      if (userDoc) {
-        return res.status(401).send("User already exists");
-      }
-      bcrypt
-        .hash(password, 12)
-        .then(password => {
-          let user = new User({
-            email,
-            password,
-            cart: { items: [] }
-          });
-          return user.save();
-        })
-        .then(() => res.status(200).send("User registered successfully"));
+  bcrypt
+    .hash(password, 12)
+    .then(password => {
+      let user = new User({
+        email,
+        password,
+        cart: { items: [] }
+      });
+      return user.save();
     })
+    .then(() => res.status(200).send("User registered successfully"))
     .catch(err => console.log(err));
 };
 
