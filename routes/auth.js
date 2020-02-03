@@ -15,7 +15,19 @@ const User = require("../models/user");
  * @api public
  */
 
-router.post("/login", logIn);
+router.post(
+  "/login",
+  [
+    body("email")
+      .isEmail()
+      .withMessage("Please enter a valid email")
+      .normalizeEmail(),
+    body("password", "password has to be valid")
+      .isLength({ min: 5 })
+      .trim()
+  ],
+  logIn
+);
 
 /**
  * @desc registers a user
@@ -35,17 +47,19 @@ router.post(
             return Promise.reject("User already exists");
           }
         });
-      }),
-    body(
-      "password",
-      "please enter a password that is at least 5 characters"
-    ).isLength({ min: 5 }),
-    body("confirmPassword").custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Passwords have to match");
-      }
-      return true;
-    })
+      })
+      .normalizeEmail(),
+    body("password", "please enter a password that is at least 5 characters")
+      .isLength({ min: 5 })
+      .trim(),
+    body("confirmPassword")
+      .trim()
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error("Passwords have to match");
+        }
+        return true;
+      })
   ],
   signUp
 );

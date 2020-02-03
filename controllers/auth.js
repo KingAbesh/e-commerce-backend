@@ -42,6 +42,9 @@ exports.signUp = (req, res, next) => {
 exports.logIn = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+   if (!errors.isEmpty()) {
+     return res.status(422).json({ errors: errors.array() });
+   }
   User.findOne({ email })
     .then(user => {
       if (!user) {
