@@ -13,6 +13,7 @@ exports.createItem = (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
   const description = req.body.description;
+  const image = req.body.image;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -48,7 +49,7 @@ exports.editItem = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).send({ errors: errors.array() });
   }
-  
+
   Item.findById(id)
     .then(item => {
       item.title = title;

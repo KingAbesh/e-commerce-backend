@@ -11,13 +11,17 @@ const itemSchema = new Schema({
     type: Number,
     required: true
   },
+  image: {
+    type: String,
+    required: true
+  },
   description: {
     type: String,
     required: true
   },
   userId: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: "User"
   }
 });
 
