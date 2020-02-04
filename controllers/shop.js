@@ -1,6 +1,8 @@
 const path = require("path");
 const fs = require("fs");
 
+const PDFDocument = require("pdfkit");
+
 const Item = require("../models/items");
 const Order = require("../models/order");
 
@@ -108,9 +110,26 @@ exports.getInvoice = (req, res, next) => {
   const invoicePath = path.join("data", "invoices", invoiceName);
 
   /**
-  * ? why the code below
-  * ! to show a less optimized way to download pdf files where the whole data has to be preloaded before hand
-  */
+   * ! creating a readable stream so node only deals with one chunk at a time.
+   * ! Better for bigger files
+   */
+
+  const pdfDoc = new PDFDocument();
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    'inline; filename="' + invoiceName + '"'
+  );
+  pdfDoc.pipe(fs.createWriteStream(invoicePath));
+  pdfDoc.pipe(res);
+  pdfDoc.text("Sureboy dey for you !!!");
+  pdfDoc.end();
+
+  /**
+   * ? why the code below
+   * ! to show a less optimized way to download pdf files where the whole data has to be preloaded before hand
+   */
+
   // fs.readFile(invoicePath, (err, data) => {
   //   if (err) return next(err);
   //   res.setHeader("Content-Type", "application/pdf");
@@ -120,15 +139,4 @@ exports.getInvoice = (req, res, next) => {
   //   );
   //   res.send(data);
   // });
-
-  /**
-   * ! creating a readable stream so node only deals with one chunk at a time
-*/
-  const file = fs.createReadStream(invoicePath);
-  res.setHeader("Content-Type", "application/pdf");
-  res.setHeader(
-    "Content-Disposition",
-    'inline; filename="' + invoiceName + '"'
-  );
-  file.pipe(res);
 };
