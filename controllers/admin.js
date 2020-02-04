@@ -1,5 +1,6 @@
 const Item = require("../models/items");
 const { validationResult } = require("express-validator");
+const fileCleanup = require("../utils/file");
 /**
  * @param {req} http request from client
  * @param {req} http response to client
@@ -68,6 +69,7 @@ exports.editItem = (req, res, next) => {
       item.title = title;
       item.price = price;
       if (image) {
+        fileCleanup.deleteFile(item.image);
         item.image = image.path;
       }
       item.description = description;
@@ -82,7 +84,15 @@ exports.editItem = (req, res, next) => {
 
 exports.deleteItem = (req, res, next) => {
   const id = req.params.id;
-  Item.findByIdAndRemove(id)
-    .then(() => res.status(200).send("Successfully deleted item"))
-    .catch(err => console.log(err));
+  Item.findById(id)
+    .then(item => {
+      if (!item) {
+        return res.status(404).send({err: "Item not found"});
+      }
+      fileCleanup.deleteFile(item.image);
+      return Item.findByIdAndRemove(id).then(() =>
+        res.status(200).send("Successfully deleted item")
+      );
+    })
+    .catch(err => next(err));
 };
