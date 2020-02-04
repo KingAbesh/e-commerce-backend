@@ -106,37 +106,58 @@ exports.fetchOrders = (req, res, next) => {
 
 exports.getInvoice = (req, res, next) => {
   const orderId = req.params.id;
-  const invoiceName = `invoice-${orderId}.pdf`;
-  const invoicePath = path.join("data", "invoices", invoiceName);
 
-  /**
-   * ! creating a readable stream so node only deals with one chunk at a time.
-   * ! Better for bigger files
-   */
+  Order.findById(orderId).then(order => {
+    if (!order) {
+      return next(new Error("No order found"));
+    }
+    const invoiceName = `invoice-${orderId}.pdf`;
+    const invoicePath = path.join("data", "invoices", invoiceName);
+    /**
+     * ! creating a readable stream so node only deals with one chunk at a time.
+     * ! Better for bigger files
+     */
 
-  const pdfDoc = new PDFDocument();
-  res.setHeader("Content-Type", "application/pdf");
-  res.setHeader(
-    "Content-Disposition",
-    'inline; filename="' + invoiceName + '"'
-  );
-  pdfDoc.pipe(fs.createWriteStream(invoicePath));
-  pdfDoc.pipe(res);
-  pdfDoc.text("Sureboy dey for you !!!");
-  pdfDoc.end();
+    const pdfDoc = new PDFDocument();
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      'inline; filename="' + invoiceName + '"'
+    );
+    pdfDoc.pipe(fs.createWriteStream(invoicePath));
+    pdfDoc.pipe(res);
+    pdfDoc.fontSize(18).text("Order Invoice", {
+      underline: true
+    });
+    pdfDoc.text("______________________");
+    let total = 0;
+    order.items.forEach(item => {
+      total += item.quantity * item.item.price;
+      pdfDoc.text(
+        item.item.title +
+          " - " +
+          item.quantity +
+          " x " +
+          "$" +
+          item.item.price
+      );
+    });
+    pdfDoc.text("Total Price: $" + total);
+    pdfDoc.end();
 
-  /**
-   * ? why the code below
-   * ! to show a less optimized way to download pdf files where the whole data has to be preloaded before hand
-   */
+    /**
+     * ? why the code below
+     * ! to show a less optimized way to download pdf files where the whole data has to be preloaded before hand
+     */
 
-  // fs.readFile(invoicePath, (err, data) => {
-  //   if (err) return next(err);
-  //   res.setHeader("Content-Type", "application/pdf");
-  //   res.setHeader(
-  //     "Content-Disposition",
-  //     'inline; filename="' + invoiceName + '"'
-  //   );
-  //   res.send(data);
-  // });
+    // fs.readFile(invoicePath, (err, data) => {
+    //   if (err) return next(err);
+    //   res.setHeader("Content-Type", "application/pdf");
+    //   res.setHeader(
+    //     "Content-Disposition",
+    //     'inline; filename="' + invoiceName + '"'
+    //   );
+    //   res.send(data);
+    // });
+  });
 };
