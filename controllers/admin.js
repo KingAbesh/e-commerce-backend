@@ -13,14 +13,23 @@ exports.createItem = (req, res, next) => {
   const title = req.body.title;
   const price = req.body.price;
   const description = req.body.description;
-  const image = req.body.image;
+  const image = req.file;
   const errors = validationResult(req);
-
+  if (!image) {
+    return res.status(422).send({ errors: "attached file is not an image" });
+  }
+  const imageUrl = image.path;
   if (!errors.isEmpty()) {
     return res.status(422).send({ errors: errors.array() });
   }
 
-  const item = new Item({ title, price, description, userId: req.user._id });
+  const item = new Item({
+    title,
+    price,
+    description,
+    image: imageUrl,
+    userId: req.user._id
+  });
   item
     .save()
     .then(result => {
@@ -43,8 +52,10 @@ exports.editItem = (req, res, next) => {
   const id = req.params.id;
   const title = req.body.title;
   const price = req.body.price;
+  const image = req.file;
   const description = req.body.description;
   const errors = validationResult(req);
+  console.log(image);
 
   if (!errors.isEmpty()) {
     return res.status(422).send({ errors: errors.array() });
@@ -54,6 +65,9 @@ exports.editItem = (req, res, next) => {
     .then(item => {
       item.title = title;
       item.price = price;
+      if (image) {
+      item.image = image.path;
+      }
       item.description = description;
       return item.save();
     })
