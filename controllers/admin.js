@@ -55,7 +55,6 @@ exports.editItem = (req, res, next) => {
   const image = req.file;
   const description = req.body.description;
   const errors = validationResult(req);
-  console.log(image);
 
   if (!errors.isEmpty()) {
     return res.status(422).send({ errors: errors.array() });
@@ -63,16 +62,18 @@ exports.editItem = (req, res, next) => {
 
   Item.findById(id)
     .then(item => {
+      if (!item) {
+        return res.status(422).send({ errors: "item not found" });
+      }
       item.title = title;
       item.price = price;
       if (image) {
-      item.image = image.path;
+        item.image = image.path;
       }
       item.description = description;
-      return item.save();
-    })
-    .then(() => {
-      res.status(200).send("Product updated successfully");
+      item.save().then(() => {
+        return res.status(200).send("Product updated successfully");
+      });
     })
     .catch(err => console.log(err));
 };

@@ -7,6 +7,7 @@ const {
   getCart,
   deleteCartItem,
   addOrder,
+  getInvoice,
   fetchOrders
 } = require("../controllers/shop");
 
@@ -58,5 +59,13 @@ router.post("/create-order", addOrder);
  * @api public
  */
 router.get("/orders", fetchOrders);
+
+/**
+ * @desc creates an invoice for an order
+ * @method get
+ * @api public
+ */
+
+router.get("/orders/:id", getInvoice);
 
 module.exports = router;

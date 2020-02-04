@@ -1,3 +1,6 @@
+const path = require("path");
+const fs = require("fs");
+
 const Item = require("../models/items");
 const Order = require("../models/order");
 
@@ -59,7 +62,7 @@ exports.deleteCartItem = (req, res, next) => {
   const itemId = req.params.id;
   req.user
     .removeFromCart(itemId)
-    .then(() => res.status(200).send("Item sucessfully removed from cart"))
+    .then(() => res.status(200).send("Item successfully removed from cart"))
     .catch(err => console.log(err));
 };
 
@@ -97,4 +100,35 @@ exports.fetchOrders = (req, res, next) => {
       res.status(200).send(orders);
     })
     .catch(err => console.log(err));
+};
+
+exports.getInvoice = (req, res, next) => {
+  const orderId = req.params.id;
+  const invoiceName = `invoice-${orderId}.pdf`;
+  const invoicePath = path.join("data", "invoices", invoiceName);
+
+  /**
+  * ? why the code below
+  * ! to show a less optimized way to download pdf files where the whole data has to be preloaded before hand
+  */
+  // fs.readFile(invoicePath, (err, data) => {
+  //   if (err) return next(err);
+  //   res.setHeader("Content-Type", "application/pdf");
+  //   res.setHeader(
+  //     "Content-Disposition",
+  //     'inline; filename="' + invoiceName + '"'
+  //   );
+  //   res.send(data);
+  // });
+
+  /**
+   * ! creating a readable stream so node only deals with one chunk at a time
+*/
+  const file = fs.createReadStream(invoicePath);
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    'inline; filename="' + invoiceName + '"'
+  );
+  file.pipe(res);
 };
