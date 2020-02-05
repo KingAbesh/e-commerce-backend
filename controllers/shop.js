@@ -5,6 +5,7 @@ const PDFDocument = require("pdfkit");
 
 const Item = require("../models/items");
 const Order = require("../models/order");
+const User = require("../models/user");
 
 //  gets all items
 
@@ -33,14 +34,16 @@ exports.getItem = (req, res, next) => {
 
 exports.addToCart = (req, res, next) => {
   const itemId = req.params.id;
-
   Item.findById(itemId)
     .then(item => {
-      console.log(item);
-      return req.user.addToCart(item);
+      User.findOne({ _id: req._id }).then(user => {
+        return user.addToCart(item);
+      });
     })
     .then(result => {
-      res.status(200).send("item successfully added to cart");
+      res
+        .status(200)
+        .send({ success: true, message: "item successfully added to cart" });
     })
     .catch(err => console.log(err));
 };
@@ -52,7 +55,6 @@ exports.getCart = (req, res, next) => {
     .populate("cart.items.itemId")
     .execPopulate()
     .then(user => {
-      console.log(user.cart.items);
       res.status(200).send(user.cart.items);
     })
     .catch(err => console.log(err));
@@ -71,24 +73,21 @@ exports.deleteCartItem = (req, res, next) => {
 // creates an order
 
 exports.addOrder = (req, res, next) => {
-  req.user
+  User.findOne({ _id: req._id })
     .populate("cart.items.itemId")
-    .execPopulate()
     .then(user => {
       const items = user.cart.items.map(item => {
         return { quantity: item.quantity, item: { ...item.itemId._doc } };
       });
       const order = new Order({
         user: {
-          email: req.user.email,
-          userId: req.user._id
+          email: user.email,
+          userId: req._id
         },
         items
       });
-      return order.save();
-    })
-    .then(() => {
-      return req.user.clearCart();
+      order.save();
+      return user.clearCart();
     })
     .then(res.status(200).send("Successfully placed order"))
     .catch(err => console.log(err));
@@ -134,12 +133,7 @@ exports.getInvoice = (req, res, next) => {
     order.items.forEach(item => {
       total += item.quantity * item.item.price;
       pdfDoc.text(
-        item.item.title +
-          " - " +
-          item.quantity +
-          " x " +
-          "$" +
-          item.item.price
+        item.item.title + " - " + item.quantity + " x " + "$" + item.item.price
       );
     });
     pdfDoc.text("Total Price: $" + total);

@@ -29,7 +29,7 @@ exports.createItem = (req, res, next) => {
     price,
     description,
     image: imageUrl,
-    userId: req.user._id
+    userId: req._id
   });
   item
     .save()

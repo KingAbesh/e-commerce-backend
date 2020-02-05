@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const isAuth = require("../middlewares/auth");
 
 const {
   getItems,
@@ -37,7 +38,7 @@ router.get("/cart", getCart);
  * @method post
  * @api public
  */
-router.post("/add-to-cart/:id", addToCart);
+router.post("/add-to-cart/:id", isAuth, addToCart);
 
 /**
  * @desc deletes an item from a cart
@@ -51,7 +52,7 @@ router.delete("/delete-from-cart/:id", deleteCartItem);
  * @method post
  * @api public
  */
-router.post("/create-order", addOrder);
+router.post("/create-order", isAuth, addOrder);
 
 /**
  * @desc fetches all orders specific to a user

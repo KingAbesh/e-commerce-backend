@@ -37,14 +37,14 @@ app.use(multer({ storage: fileStorage, fileFilter }).single("image"));
 
 // manually creating a user but no longer needed as authorization has been implemented. Leaving it here for reference.
 
-app.use((req, res, next) => {
-  User.findById("5e0c4df134913e285ce41650")
-    .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(err => console.log(err));
-});
+// app.use((req, res, next) => {
+//   User.findById("5e0c4df134913e285ce41650")
+//     .then(user => {
+//       req.user = user;
+//       next();
+//     })
+//     .catch(err => console.log(err));
+// });
 
 // Registers every route
 

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { check, body } = require("express-validator");
+const { body } = require("express-validator");
 
 const {
   createItem,

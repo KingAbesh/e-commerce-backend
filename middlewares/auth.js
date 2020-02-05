@@ -17,6 +17,6 @@ module.exports = (req, res, next) => {
   if (!decoded) {
     return res.status(401).send({ message: "Not Authorized" });
   }
-  req.user._id = decoded._id;
+  req._id = decoded._id;
   next();
 };
