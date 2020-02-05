@@ -51,9 +51,8 @@ exports.addToCart = (req, res, next) => {
 //  gets a cart as specific to a user
 
 exports.getCart = (req, res, next) => {
-  req.user
+  User.findOne({ _id: req._id })
     .populate("cart.items.itemId")
-    .execPopulate()
     .then(user => {
       res.status(200).send(user.cart.items);
     })
@@ -64,9 +63,16 @@ exports.getCart = (req, res, next) => {
 
 exports.deleteCartItem = (req, res, next) => {
   const itemId = req.params.id;
-  req.user
-    .removeFromCart(itemId)
-    .then(() => res.status(200).send("Item successfully removed from cart"))
+  User.findOne({ _id: req._id })
+    .then(user => {
+      user
+        .removeFromCart(itemId)
+        .then(
+          res
+            .status(200)
+            .send({ message: "Item successfully removed from cart" })
+        );
+    })
     .catch(err => console.log(err));
 };
 

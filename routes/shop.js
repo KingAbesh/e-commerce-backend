@@ -14,7 +14,7 @@ const {
 
 /**
  * @desc fetches items
- * @method get 
+ * @method get
  * @api public
  */
 router.get("/items", getItems);
@@ -24,7 +24,7 @@ router.get("/items", getItems);
  * @method get
  * @api public
  */
-router.get("/items/:id", getItem);
+router.get("/items/:id", isAuth, getItem);
 
 /**
  * @desc gets all items in a cart
@@ -45,7 +45,7 @@ router.post("/add-to-cart/:id", isAuth, addToCart);
  * @method delete
  * @api public
  */
-router.delete("/delete-from-cart/:id", deleteCartItem);
+router.delete("/delete-from-cart/:id", isAuth, deleteCartItem);
 
 /**
  * @desc creates an order
@@ -59,7 +59,7 @@ router.post("/create-order", isAuth, addOrder);
  * @method get
  * @api public
  */
-router.get("/orders", fetchOrders);
+router.get("/orders", isAuth, fetchOrders);
 
 /**
  * @desc creates an invoice for an order
@@ -67,6 +67,6 @@ router.get("/orders", fetchOrders);
  * @api public
  */
 
-router.get("/orders/:id", getInvoice);
+router.get("/orders/:id", isAuth, getInvoice);
 
 module.exports = router;
