@@ -4,6 +4,7 @@ const path = require("path");
 const app = express();
 const mongoose = require("mongoose");
 const multer = require("multer");
+const cors = require("cors");
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -29,6 +30,9 @@ const authRoutes = require("./routes/auth");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cors());
+
 app.use(multer({ storage: fileStorage, fileFilter }).single("image"));
 
 // manually creating a user but no longer needed as authorization has been implemented. Leaving it here for reference.

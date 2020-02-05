@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 
 const nodemailer = require("nodemailer");
@@ -42,9 +43,10 @@ exports.signUp = (req, res, next) => {
 exports.logIn = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-   if (!errors.isEmpty()) {
-     return res.status(422).json({ errors: errors.array() });
-   }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
   User.findOne({ email })
     .then(user => {
       if (!user) {
@@ -60,10 +62,14 @@ exports.logIn = (req, res, next) => {
               "Incorrect username or password, please review details and try again"
             );
         }
+        const token = jwt.sign(
+          { email: user.email, _id: user._id },
+          "somesecretkey",
+          { expiresIn: "1hr" }
+        );
         res.status(200).send({
           _id: user._id,
-          email: user.email,
-          cart: user.cart
+          token
         });
       });
     })
