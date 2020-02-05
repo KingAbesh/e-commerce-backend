@@ -7,6 +7,7 @@ const {
   editItem,
   deleteItem
 } = require("../controllers/admin");
+const isAuth = require("../middlewares/auth");
 
 /**
  * @route admin/add-item
@@ -17,8 +18,9 @@ const {
 
 router.post(
   "/add-item",
+  isAuth,
   [
-    body("title")
+    (body("title")
       .isString()
       .isLength({ min: 3 })
       .withMessage("Please make sure title is at least three characters")
@@ -29,7 +31,7 @@ router.post(
     body("description")
       .isLength({ min: 5, max: 100 })
       .withMessage("Please make sure title is at least five characters")
-      .trim()
+      .trim())
   ],
   createItem
 );
@@ -40,7 +42,7 @@ router.post(
  * @method get
  * @api public
  */
-router.get("/items", getItems);
+router.get("/items", isAuth, getItems);
 
 /**
  * @route admin/edit-item/:id
@@ -51,6 +53,7 @@ router.get("/items", getItems);
 
 router.put(
   "/edit-item/:id",
+  isAuth,
   [
     body("title")
       .isString()
@@ -75,6 +78,6 @@ router.put(
  * @api public
  */
 
-router.delete("/delete-item/:id", deleteItem);
+router.delete("/delete-item/:id", isAuth, deleteItem);
 
 module.exports = router;
