@@ -66,6 +66,11 @@ exports.editItem = (req, res, next) => {
       if (!item) {
         return res.status(422).send({ errors: "item not found" });
       }
+      if (item.userId.toString() !== req._id) {
+        return res
+          .status(403)
+          .send({ success: "false", message: "Not authorized" });
+      }
       item.title = title;
       item.price = price;
       if (image) {
@@ -87,7 +92,12 @@ exports.deleteItem = (req, res, next) => {
   Item.findById(id)
     .then(item => {
       if (!item) {
-        return res.status(404).send({err: "Item not found"});
+        return res.status(404).send({ err: "Item not found" });
+      }
+      if (item.userId.toString() !== req._id) {
+        return res
+          .status(403)
+          .send({ success: "false", message: "Not authorized" });
       }
       fileCleanup.deleteFile(item.image);
       return Item.findByIdAndRemove(id).then(() =>

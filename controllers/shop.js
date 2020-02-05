@@ -102,7 +102,7 @@ exports.addOrder = (req, res, next) => {
 // fetches all orders specific to a user
 
 exports.fetchOrders = (req, res, next) => {
-  Order.find({ "user.userId": req.user._id })
+  Order.find({ "user.userId": req._id })
     .then(orders => {
       res.status(200).send(orders);
     })
